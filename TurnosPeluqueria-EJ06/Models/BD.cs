@@ -4,25 +4,37 @@ using Microsoft.Data.SqlClient;
 using TurnosPeluqueria_EJ06.Models;
 
 
-public static class BD
+public class BD
 {
-    private static string _connectionString =
+    private string _connectionString =
         @"";
 
-    public static List<Turno> ObtenerTurnos()
+    public List<Turno> ObtenerTurnos()
     {
-        // TODO
+      List<Turno> turnos = new List<Turno>();
+      using(SqlConnection connection = new SqlConnection(_connectionString))
+
+      {
+       string query = "SELECT * FROM Turnos";
+       turnos = connection.Query<Turnos>(query).ToList();
+
+      }return turnos;
 
     }
 
-    public static int AgregarTurno(Turno t)
+    public int AgregarTurno(Turno t)
     {
-        // TODO
+        string query = "INSERT INTO Turnos (NombreCliente, Servicio, FechaHora, Estado) VALUES (@pNombreCliente, @pServicio, @pFechaHora, @pEstado)"
+
+          using(SqlConnection connection = new SqlConnection(_connectionString))
+          {
+          connection.Execute(query, new {pNombreCliente = turnos.NombreCliente})
+          }
     }
 
 
     /*
-    public static int CambiarEstado(int id, string nuevoEstado)
+    public int CambiarEstado(int id, string nuevoEstado)
     {
         // TODO
 

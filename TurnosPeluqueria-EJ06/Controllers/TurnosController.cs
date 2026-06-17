@@ -5,10 +5,11 @@ namespace TurnosPeluqueria_EJ06.Controllers;
 
 public class TurnosController : Controller
 {
+    private BD bd = new BD();
+
     public IActionResult Index()
     {
-        ViewBag.turnos = BD.ObtenerTurnos();
-
+        ViewBag.turnos = bd.ObtenerTurnos();
         return View();
     }
 
@@ -21,25 +22,26 @@ public class TurnosController : Controller
     [HttpPost]
     public IActionResult Nuevo(Turno turno)
     {
-        // Estado inicial fijo
-        if (string.IsNullOrWhiteSpace(turno.Estado))
+        if (turno.Estado == null || turno.Estado == "")
+        {
             turno.Estado = "Pendiente";
+        }
 
-        BD.AgregarTurno(turno);
+        bd.AgregarTurno(turno);
         return RedirectToAction("Index");
     }
 
     [HttpPost]
     public IActionResult Atender(int id)
     {
-        BD.CambiarEstado(id, "Atendido");
+        bd.CambiarEstado(id, "Atendido");
         return RedirectToAction("Index");
     }
 
     [HttpPost]
     public IActionResult Cancelar(int id)
     {
-        BD.CambiarEstado(id, "Cancelado");
+        bd.CambiarEstado(id, "Cancelado");
         return RedirectToAction("Index");
     }
 }
