@@ -16,29 +16,31 @@ public class BD
 
       {
        string query = "SELECT * FROM Turnos";
-       turnos = connection.Query<Turnos>(query).ToList();
+       turnos = connection.Query<Turno>(query).ToList();
 
       }return turnos;
 
     }
 
-    public int AgregarTurno(Turno t)
+    public void AgregarTurno(Turno t)
     {
-        string query = "INSERT INTO Turnos (NombreCliente, Servicio, FechaHora, Estado) VALUES (@pNombreCliente, @pServicio, @pFechaHora, @pEstado)"
+        string query = "INSERT INTO Turnos (NombreCliente, Servicio, FechaHora, Estado) VALUES (@pNombreCliente, @pServicio, @pFechaHora, @pEstado)";
 
           using(SqlConnection connection = new SqlConnection(_connectionString))
           {
-          connection.Execute(query, new {pNombreCliente = turnos.NombreCliente})
+          connection.Execute(query, new {pNombreCliente = t.NombreCliente, pServicio = t.Servicio, pFechaHora = t.FechaHora, pEstado = t.Estado});
           }
     }
 
 
-    /*
-    public int CambiarEstado(int id, string nuevoEstado)
+    
+    public void CambiarEstado(int id, string nuevoEstado)
     {
-        // TODO
+       string query = "UPDATE Turnos SET Estado = @pEstado WHERE Id = @pId";
+       using(SqlConnection connection = new SqlConnection(_connectionString))
+       {
+          connection.Execute(query, new { pEstado = nuevoEstado, pId = id });
 
-        throw new NotImplementedException();
+       }
     }
-    */
 }
